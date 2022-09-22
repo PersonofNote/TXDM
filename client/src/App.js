@@ -1,9 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 
-import TestList from './TestList'
+import TestList from './components/TestList'
 
+// TEMP
 const url = "http://localhost:5000/users"
+
+//TODO: Add React Router
 
 function App() {
   return (
