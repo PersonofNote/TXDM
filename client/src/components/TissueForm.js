@@ -1,4 +1,6 @@
 import {useState} from 'react';
+// Preloaded id list from airtable
+import constants from '../data';
 
 const url = "http://localhost:5000/api/post_sample"
 
@@ -11,7 +13,7 @@ function TissueForm() {
     }
   )
 
-  const [results, setResults] = useState(null)
+  const [results, setResults] = useState([])
 
   // TODO: determine how to gracefully reveal options
   // Could keep track of if this is the first time the button has been pressed
@@ -25,15 +27,13 @@ function TissueForm() {
     }else{
         setData({...data, [e.target.name]: e.currentTarget.value})
     }
-    console.log(data)
+    console.log(JSON.stringify(data))
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log("POSTING" + data)
-    
     fetch(url, {
-        method: 'POST', // or 'PUT'
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -41,17 +41,27 @@ function TissueForm() {
         })
         .then((response) => response.json())
         .then((data) => {
-            console.log('Success:', data);
-            setResults(data)
+            // TODO: Make a cute loader
+            setResults(data.data)
+            console.log(data)
             console.log(results)
+            
         })
         .catch((error) => {
             console.error('Error:', error);
         });
 
   }
-  // TODO: Load from a table of options and populate that way
+  const selectValues = constants.tissue_sample_types
+  const dropdown = Object.keys(selectValues).map((val) =>
+  <option value={val} key={`form-${val}`}>{selectValues[val]}</option>
+);
+
+// TODO: preload the data type links so it displays nice.
+// Consider a dropdown to learn more
+const resultsDisplay = results.map(r => <li key={r.id}> {r.fields['Data Type']} Provided by: {r.fields['Diagnostic Company']}. {r.fields['Description']}</li>)
   return (
+    <>
     <form>
         <div>
         <input onClick={handleSelect} type="radio" id="cancer" name="diagnosisType" value="cancer"/>
@@ -62,11 +72,7 @@ function TissueForm() {
         <div>
         <label htmlFor="tissueType">Select a Tissue Type:</label>
             <select required onChange={handleSelect} multiple name="tissueType" id="tissueType">
-            <option value="blood">Blood</option>
-            <option value="plasma">Plasma</option>
-            <option value="serum">Serum</option>
-            <option value="ffpe">FFPE (Tumor)</option>
-            <option value="fresh-frozen">Fresh Frozen (Tumor)</option>
+            {dropdown}
         </select>
         </div>
         <div>
@@ -82,6 +88,9 @@ function TissueForm() {
         </div>
     <button onClick={handleSubmit}>Submit </button>
     </form>
+
+    <div>{resultsDisplay}</div>
+    </>
   );
 }
 

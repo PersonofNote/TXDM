@@ -18,8 +18,6 @@ const passList = {
 
 app.use(cors(passList))
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
-
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
     apiKey: AIRTABLE_API_KEY
@@ -27,13 +25,35 @@ Airtable.configure({
 
 const base = Airtable.base(AIRTABLE_BASE_ID);
 
+const preLoadData = async() => {
+  // Getting linked table data from Airtable is annoying. This function
+  // Preloads data that we want and maps it to an object for display
+  const LINKED_DATA = {}
+  LINKED_DATA.tissue_sample_matrix = {}
+
+  const tissue_sample_table = 'tbliGPwuWUq0KnIH4'
+  const records = await base(tissue_sample_table).select().all();
+
+  records.forEach(function(record) {
+    id = record.id
+    field_name = record.get('Tissue')
+    LINKED_DATA.tissue_sample_matrix[id] = field_name
+});
+
+  return LINKED_DATA
+}
+
+// This function wraps everything else for now; once we switch to postgres
+// it will be removed
+preLoadData().then((result)=>{
+  const airtable_data = result
+  console.log(airtable_data)
 
 const printTable = async(table, fields) => {
   const table_id = AIRTABLE_TABLE_IDS[table]
   const formatTableName = (table) => {
     return table.split('_')
   }
-  console.log(formatTableName(table))
   const list = []
   const records = await base(table).select().all();
   records.forEach(function(record) {
@@ -44,23 +64,21 @@ const printTable = async(table, fields) => {
   return list
 }
 
-const getResults = async(table) => {
+
+const getResults = async(table, types) => {
   const list = []
   const records = await base(table).select().all();
 
   records.forEach(function(record) {
-    // TODO: Filter by supplied fields
+    // TODO: Filter by supplied fields. Will require installing bodyparser!
     console.log('Retrieved', record.id );
-    // TODO: filter  by includes any of the inputs and return Data Type (must fetch from other table as well), Company and Description. (Possibly do on client side)
     if (record.fields['Required Sample Types'] && record.fields['Required Sample Types'].includes('reczCaSqvunbPx7KE')){
       list.push(record)
     }
-    //console.log(list)
 });
 
   return list
 }
-
 
 
 app.get('/api', (req, res) => { 
@@ -73,8 +91,13 @@ app.get('/api/users/:table', (req, res) => {
 })
 
 app.post('/api/post_sample', (req, res) => {
-  console.log(req.body)
+  console.log("POST")
+  console.log(req)
   const results = getResults('tblAyos67WFzbHe5C').then((result)=>{
     res.send({data: result})
   })
+})
+
+
+  app.listen(port, () => console.log(`Listening on port ${port}`));
 })

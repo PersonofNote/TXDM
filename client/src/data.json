@@ -1,0 +1,22 @@
+{
+    "tissue_sample_types": 
+    {
+    "rec74jJ1cpk1Zqp9s": "ctRNA",
+    "recBUsFFdzsNdgOZJ": "Core",
+    "recGA4HYWiXHd6Q2o": "Block",
+    "recGeMoJntHEbpSWa": "Fluid Drain",
+    "recJCZoFcciXcPL57": "PBMC",
+    "recK3Wx04nNT0W7Dh": "Blood",
+    "recQXaOFK6HRjDI5B": "Slides",
+    "recTVn0NM7DYjxo3X": "Cells",
+    "recTXwcmDSiuYR3LD": "Urine",
+    "recdxMQe5eLD1SJeC": "Stool",
+    "recg026p4FuEczfp6": "Fresh Frozen Tumor",
+    "recl5GNxSYphuoPe2": "Plasma",
+    "recooOV00NmhdSQqq": "Serum",
+    "recuVXAymPwbdmVVY": "Fresh Tumor",
+    "recuZMDwJMMchIQjn": "ctDNA",
+    "recyEJzBs2n36YWA5": "Saliva",
+    "reczCaSqvunbPx7KE": "FFPE Tumor"
+  }
+}
