@@ -1,9 +1,8 @@
 import './App.css';
 
-import TestList from './components/TestList'
+import TableList from './components/TableList'
+import TissueForm from './components/TissueForm'
 
-// TEMP
-const url = "http://localhost:5000/users"
 
 //TODO: Add React Router
 
@@ -11,9 +10,9 @@ function App() {
   return (
     <div className="App">
       <header className="header">
-        Component here
+        Header Component here (from AMS library probably)
       </header>
-      <TestList url={url} />
+      <TissueForm />
     </div>
   );
 }

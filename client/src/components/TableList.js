@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 
-function TestList({url}) {
+function TableList({url}) {
    const [data, setData] = useState([])
 
    useEffect(() =>{
@@ -25,4 +25,4 @@ function TestList({url}) {
     );
   }
   
-  export default TestList;
+  export default TableList;
