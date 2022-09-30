@@ -1,3 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --main-bg-color: white;
+  --lightest: #caf0f8;
+  --lighter: #90e0ef;
+  --medium: #00b4d8;
+  --darker: #0077b6;
+  --darkest: #03045e;
+  --text-dark: black;
+  --text-light: white; 
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +25,58 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+/* CSS */
+.button {
+  max-width: 100px;
+  margin: auto;
+  background-color: var(--medium);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  list-style: none;
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+
+header {
+  padding: 12px;
+  background-color: var(--darkest);
+  color: var(--text-light);
+}
+
+h1 {
+  color: var(--darkest);
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+h2 {
+  color: var(--darker);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+h3 {
+  color: var(--darker);
+  font-size: 1.5rem;
+  font-weight: bold;
 }

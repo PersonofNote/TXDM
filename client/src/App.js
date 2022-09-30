@@ -1,18 +1,18 @@
 import './App.css';
 
-import TableList from './components/TableList'
+import Header from './components/Header'
+import Footer from './components/Footer'
 import TissueForm from './components/TissueForm'
-
+import sampleData from './data.json'
 
 //TODO: Add React Router
 
 function App() {
   return (
     <div className="App">
-      <header className="header">
-        Header Component here (from AMS library probably)
-      </header>
+      <Header leftLinks={sampleData.header_links}/>
       <TissueForm />
+      <Footer />
     </div>
   );
 }

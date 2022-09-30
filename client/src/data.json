@@ -1,4 +1,10 @@
 {
+  "header_links": [
+    {
+      "text": "Link1",
+      "href": "www.aminorstudio.com"
+    }
+  ],
     "tissue_sample_types": 
     {
     "rec74jJ1cpk1Zqp9s": "ctRNA",

@@ -1,0 +1,55 @@
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form div {
+    padding: 12px;
+}
+
+.helper-text {
+    opacity: 0;
+    transition: 250ms ease-in-out;
+}
+
+.helper-text.visible {
+    opacity: 1;
+    transition: 250ms ease-in-out;
+}
+
+.radio:checked:focus + label::after, .e-info .e-radio:checked + label:hover::after { /* csslint allow: adjoining-classes */
+    background-color: #0b7dda;
+    border-color: #0b7dda;
+  }
+  
+.radio:checked + label::before {
+    border-color: #2196f3;
+  }
+  
+.radio:checked:focus + label::before, .e-info .e-radio:checked + label:hover::before {
+    border-color: #0b7dda;
+  }
+  
+.radio + label:hover::before {
+    border-color: #b1afaf
+  }
+
+
+.form-element {
+    animation-duration: 1s;
+    animation-name: reveal; 
+}
+
+.form-element .button.active {
+    background-color: var(--darker);
+}
+
+@keyframes reveal {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+        opacity: 1;
+    }
+  }
