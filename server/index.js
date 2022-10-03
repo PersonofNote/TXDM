@@ -111,7 +111,6 @@ app.get('/api/users/:table', (req, res) => {
 })
 
 app.post('/api/post_sample', (req, res) => {
-  console.log("POST")
   const tissueType = req.body.tissueType;
   getResults('tblAyos67WFzbHe5C', tissueType).then((result)=>{
     console.log("RESULTS")
