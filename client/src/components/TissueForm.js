@@ -87,14 +87,18 @@ function TissueForm() {
         });
   }
   const selectValues = constants.tissue_sample_types
+  /*
   const dropdown = Object.keys(selectValues).map((val) =>
   <option value={selectValues[val]} key={`form-${val}`}>{selectValues[val]}</option>
 );
+*/
 
   // Option for dropdown
+  /*
 const dropdownElement = <select required onChange={handleSelect} multiple name="tissueType" id="tissueType">
 {dropdown}
 </select>
+*/
 
 // TODO: Extract into own function
 const buttonSelects = Object.keys(selectValues).map((val) => {
