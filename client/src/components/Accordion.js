@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { BsCaretDownFill } from 'react-icons/bs'
 
 const Accordion = ({ content }) => {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(false)
 
   return (
     <div className="accordion-item">
@@ -12,11 +12,11 @@ const Accordion = ({ content }) => {
       </div>
       {isActive && (
         <div className="accordion-content">
-        <div className="accordion-description">{content.fields['Description']}</div>
+        <div className="accordion-description">{content.fields.Description}</div>
         </div>
-    )}
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Accordion;
+export default Accordion

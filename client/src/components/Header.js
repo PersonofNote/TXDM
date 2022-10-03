@@ -1,7 +1,9 @@
-function Header({logo, leftLinks=null, rightLinks=null, sticky=false, bgColor }) {
-    const renderLinks = (links) => links.map(link => <a href={link.href}>{link.text}</a>)
+import React from 'react'
+
+function Header ({ logo, leftLinks = null, rightLinks = null, sticky = false, bgColor }) {
+  const renderLinks = (links) => links.map(link => <a key="" href={link.href}>{link.text}</a>)
   return (
-      <header className="header" style={{backgroundColor: bgColor}}>
+      <header className={`header ${sticky && 'sticky'}`} style={{ backgroundColor: bgColor }}>
         {logo && logo}
         { leftLinks &&
         <div className='left'>{renderLinks(leftLinks)}</div>
@@ -10,7 +12,7 @@ function Header({logo, leftLinks=null, rightLinks=null, sticky=false, bgColor })
         <div className='right'>{renderLinks(rightLinks)}</div>
         }
       </header>
-  );
+  )
 }
 
-export default Header;
+export default Header

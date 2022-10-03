@@ -1,25 +1,26 @@
-import {useState} from 'react';
+import React, { useState } from 'react'
 // Preloaded id list from airtable
-import constants from '../data';
+import constants from '../data'
 import { adjustPropertySizebyTextLength } from '../helpers'
 import './forms.css'
 
 // Components
-import Accordion from './Accordion';
+import Accordion from './Accordion'
 
 // Icons
 import { GoBeaker } from 'react-icons/go'
 import { BiDna } from 'react-icons/bi'
 import { FaMicroscope } from 'react-icons/fa'
 
+/* eslint-disable-next-line */ 
 const url = `${process.env.REACT_APP_BASE_URL}/post_sample`
 
-function TissueForm() {
+function TissueForm () {
   const [data, setData] = useState(
     {
-        diagnosisType: null,
-        tissueType : null,
-        quantity: null
+      diagnosisType: null,
+      tissueType: null,
+      quantity: null
     }
   )
   const [activeMultiSelect, setActiveMultiSelect] = useState([])
@@ -29,25 +30,25 @@ function TissueForm() {
   const handleSelect = e => {
     // TODO: consider breaking this up into smaller pieces and offering more customization
     // BUG: Form is still one click behind
-    if (e.currentTarget.name === 'quantity'){
-        e.preventDefault();
-        const unitsDiv = document.getElementById("units")
-        setData({...data, [e.target.name]: `${e.currentTarget.value} ${unitsDiv.value} `})
-    }else{
-      if (e.target.multiple){
+    if (e.currentTarget.name === 'quantity') {
+      e.preventDefault()
+      const unitsDiv = document.getElementById('units')
+      setData({ ...data, [e.target.name]: `${e.currentTarget.value} ${unitsDiv.value} ` })
+    } else {
+      if (e.target.multiple) {
         // TODO: Consider detecting a button group specifically
-        e.preventDefault();
-        if(activeMultiSelect.includes(e.target.value)){
+        e.preventDefault()
+        if (activeMultiSelect.includes(e.target.value)) {
           // Remove from list
           const updatedList = activeMultiSelect.filter(element => element !== e.target.value)
-          setActiveMultiSelect(updatedList, setData({...data, [e.target.name]: activeMultiSelect}))
-        }else{
+          setActiveMultiSelect(updatedList, setData({ ...data, [e.target.name]: activeMultiSelect }))
+        } else {
           // Add to list
-          setActiveMultiSelect([...activeMultiSelect, e.currentTarget.value], setData({...data, [e.target.name]: activeMultiSelect}))
+          setActiveMultiSelect([...activeMultiSelect, e.currentTarget.value], setData({ ...data, [e.target.name]: activeMultiSelect }))
         }
-        setData({...data, [e.target.name]: activeMultiSelect})
-      }else{
-        setData({...data, [e.target.name]: e.currentTarget.value})
+        setData({ ...data, [e.target.name]: activeMultiSelect })
+      } else {
+        setData({ ...data, [e.target.name]: e.currentTarget.value })
       }
     }
     console.log(JSON.stringify(data))
@@ -56,9 +57,9 @@ function TissueForm() {
   const resetForm = () => {
     setData({
       diagnosisType: null,
-      tissueType : null,
+      tissueType: null,
       quantity: null
-  })
+    })
     setActiveMultiSelect([])
     setResults([])
   }
@@ -67,24 +68,22 @@ function TissueForm() {
     e.preventDefault()
     setLoadingResults(true)
     fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("RETURN DATA")
-          console.log(data)
-            // TODO: Make a cute loader
-            setLoadingResults(false)
-            setResults(data.data)
-            console.log(results)
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // TODO: Make a cute loader
+        setLoadingResults(false)
+        setResults(data.data)
+        console.log(results)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   }
   const selectValues = constants.tissue_sample_types
   /*
@@ -100,24 +99,24 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
 </select>
 */
 
-// TODO: Extract into own function
-const buttonSelects = Object.keys(selectValues).map((val) => {
-  const padding = adjustPropertySizebyTextLength(selectValues[val])
-  return <button multiple name="tissueType" className={`m-2 button leading-tight ${activeMultiSelect.includes(selectValues[val]) ? 'active' : ""}`} style={{margin: '2px', padding: padding}} onClick={handleSelect} value={selectValues[val]} key={`form-${val}`}>{selectValues[val]}</button>
-}
-);
+  // TODO: Extract into own function
+  const buttonSelects = Object.keys(selectValues).map((val) => {
+    const padding = adjustPropertySizebyTextLength(selectValues[val])
+    return <button multiple name="tissueType" className={`m-2 button leading-tight ${activeMultiSelect.includes(selectValues[val]) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={selectValues[val]} key={`form-${val}`}>{selectValues[val]}</button>
+  }
+  )
 
-const loader = "Loading"
+  const loader = 'Loading'
 
-// Consider a dropdown to learn more
-// TODO: Get linked data types 
-const resultsDisplay = results.map(r => 
-  <li key={r.id}> <h3>{r.fields['Machine / Assay']}</h3> 
-  Diagnostic Company: {r.fields['Diagnostic Company']}. {r.fields['Description']} <br/> 
-  Derived from: {r.tissue_sample_name.join(", ")} <br/> 
+  // Consider a dropdown to learn more
+  // TODO: Get linked data types]
+  /*
+  const resultsDisplay = results.map(r =>
+  <li key={r.id}> <h3>{r.fields['Machine / Assay']}</h3>
+  Diagnostic Company: {r.fields['Diagnostic Company']}. {r.fields.Description} <br/>
+  Derived from: {r.tissue_sample_name.join(', ')} <br/>
   <a href={r.fields['Technical Documentation / Protocol']}>Technical Documentation / Protocol</a></li>)
-  
-  
+    */
   return (
     <>
     {!results.length > 0 && (
@@ -142,7 +141,7 @@ const resultsDisplay = results.map(r =>
       </div>
             </div>
           </div>
-          {data.diagnosisType != null &&(
+          {data.diagnosisType != null && (
           <div className="form-element">
           <h3 className={`helper-text ${data.tissueType === null && 'visible'}`}>What kind of tissue is it?</h3>
           <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope /> Tissue Type:</label>
@@ -152,7 +151,7 @@ const resultsDisplay = results.map(r =>
           </div>
           </div>
           )}
-          {data.tissueType != null &&(
+          {data.tissueType != null && (
           <div className="form-element">
               <h3 className={`helper-text ${data.quantity === null && 'visible'}`}>How much do you have?</h3>
               <div className="flex flex-row justify-center">
@@ -167,7 +166,7 @@ const resultsDisplay = results.map(r =>
               </div>
           </div>
           )}
-      {data.quantity != null && data.tissueType.length > 1 &&(
+      {data.quantity != null && data.tissueType.length > 1 && (
       <span className="m-auto"><button className='button' onClick={handleSubmit}>Submit </button></span>
       )}
       </form>
@@ -179,14 +178,14 @@ const resultsDisplay = results.map(r =>
       <h1>Results:</h1>
       <div className="accordion p-4">
         {results.map(r => (
-          <Accordion content={r} />
+          <Accordion key={r.id} content={r} />
         ))}
         </div>
       <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
       </>
     )}
     </>
-  );
+  )
 }
 
-export default TissueForm;
+export default TissueForm
