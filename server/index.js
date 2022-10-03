@@ -32,7 +32,8 @@ const preLoadData = async() => {
   // This function preloads data that we want and maps it to an object for display
 
   const LINKED_DATA = {}
-  LINKED_DATA.tissue_sample_matrix = {}
+  LINKED_DATA.tissue_sample_names_by_id = {}
+  LINKED_DATA.tissue_sample_ids_by_name = {}
 
   const tissue_sample_table = 'tbliGPwuWUq0KnIH4'
   const records = await base(tissue_sample_table).select().all();
@@ -40,7 +41,8 @@ const preLoadData = async() => {
   records.forEach(function(record) {
     id = record.id
     field_name = record.get('Tissue')
-    LINKED_DATA.tissue_sample_matrix[id] = field_name
+    LINKED_DATA.tissue_sample_names_by_id[id] = field_name
+    LINKED_DATA.tissue_sample_ids_by_name[field_name] = id
 });
 
   return LINKED_DATA
@@ -50,6 +52,8 @@ const preLoadData = async() => {
 // it will be removed
 preLoadData().then((result)=>{
   const airtable_data = result
+  console.log("🟢 App online 🟢")
+  console.log("Preloaded data:")
   console.log(airtable_data)
 
 const printTable = async(table, fields) => {
@@ -61,7 +65,6 @@ const printTable = async(table, fields) => {
   const records = await base(table).select().all();
   records.forEach(function(record) {
     // TODO: Filter by supplied fields
-    console.log('Retrieved', record.get(fields[0]));
     list.push(record.get(fields[0]))
 });
   return list
@@ -69,35 +72,27 @@ const printTable = async(table, fields) => {
 
 
 const getResults = async(table, types) => {
+
   const list = []
   try{
+  // TODO: add pagination? Check if table will get much bigger
   const records = await base(table).select().all();
-  console.log("FILTER BY")
-  console.log(types)
-  /*
-  let records1 = await base(table).select({filterByFormula: `{Tissue Sample} = Tissue`}).all()
-  console.log("TEST JOIN")
-  console.log(records1)
-  */
 
-  // TODO: INVERT THIS. Look up samples, and then query the machines/assays linked field, not the other way around!!!
+  // TODO: Look into inverting this: Look up samples, and then query the machines/assays linked field.
+  // Might be simpler/faster?
 
   records.forEach(function(record) {
     if (record.fields['Required Sample Types']){
-  //pass
-}
-    console.log("Record:")
-    console.log(record.fields['Required Sample Types'])
-    if (record.fields['Required Sample Types']){
-      base('Tissue Sample').find(record.fields['Required Sample Types'], function(err, r) {
-        if (err) { console.error(err); return; }
-        console.log('Retrieved from linked table', r);
-    });
-      list.push(record)
-      console.log('Retrieved', record.id );
+      const rField = record.fields['Required Sample Types'];
+      const idKeys = types.map(type => airtable_data.tissue_sample_ids_by_name[type])
+      if (rField.some(item => idKeys.includes(item))) {
+        const sample_names = record.fields['Required Sample Types'].map(r => {console.log("INDIVIDUAL"); console.log(r); console.log(airtable_data.tissue_sample_names_by_id[r]); return airtable_data.tissue_sample_names_by_id[r]})
+        record.tissue_sample_name = sample_names;
+        list.push(record)
+        console.log('Match Found, pushing', record );
+      }
     }
   });
-  
   return list
 }catch(error){
   console.log(error)
@@ -118,9 +113,14 @@ app.get('/api/users/:table', (req, res) => {
 app.post('/api/post_sample', (req, res) => {
   console.log("POST")
   const tissueType = req.body.tissueType;
-  console.log(tissueType)
   getResults('tblAyos67WFzbHe5C', tissueType).then((result)=>{
-    res.send({data: result})
+    console.log("RESULTS")
+    console.log(result)
+    if (result.length < 1) {
+      res.send({err: ["There are no results for this sample type yet; please try again with different parameters"]})
+    }else{
+      res.send({data: result})
+    }
   })
 })
 

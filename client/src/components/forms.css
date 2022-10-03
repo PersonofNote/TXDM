@@ -4,7 +4,7 @@ form {
 }
 
 form div {
-    padding: 12px;
+    padding: 8px;
 }
 
 .helper-text {
@@ -17,24 +17,6 @@ form div {
     transition: 250ms ease-in-out;
 }
 
-.radio:checked:focus + label::after, .e-info .e-radio:checked + label:hover::after { /* csslint allow: adjoining-classes */
-    background-color: #0b7dda;
-    border-color: #0b7dda;
-  }
-  
-.radio:checked + label::before {
-    border-color: #2196f3;
-  }
-  
-.radio:checked:focus + label::before, .e-info .e-radio:checked + label:hover::before {
-    border-color: #0b7dda;
-  }
-  
-.radio + label:hover::before {
-    border-color: #b1afaf
-  }
-
-
 .form-element {
     animation-duration: 1s;
     animation-name: reveal; 
@@ -42,6 +24,14 @@ form div {
 
 .form-element .button.active {
     background-color: var(--darker);
+}
+
+.results-list {
+  list-style: none;
+}
+
+input {
+  border-bottom: 1px solid var(--darker);
 }
 
 @keyframes reveal {
