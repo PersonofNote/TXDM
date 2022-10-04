@@ -113,13 +113,7 @@ app.get('/api/users/:table', (req, res) => {
 app.post('/api/post_sample', (req, res) => {
   const tissueType = req.body.tissueType;
   getResults('tblAyos67WFzbHe5C', tissueType).then((result)=>{
-    console.log("RESULTS")
-    console.log(result)
-    if (result.length < 1) {
-      res.send({err: ["There are no results for this sample type yet; please try again with different parameters"]})
-    }else{
       res.send({data: result})
-    }
   })
 })
 

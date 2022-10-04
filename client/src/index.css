@@ -82,6 +82,10 @@ a {
   transition-duration: var(--transition-duration-medium);
 }
 
+.icon {
+  fill: var(--darker);
+}
+
 
 header {
   padding: 12px;
@@ -105,4 +109,8 @@ h3 {
   color: var(--darker);
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.content {
+  min-height: calc(100vh - 80px);
 }

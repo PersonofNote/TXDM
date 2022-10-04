@@ -12,7 +12,9 @@ function App () {
   return (
     <div className="App">
       <Header leftLinks={sampleData.header_links}/>
-      <TissueForm />
+      <div className="content">
+        <TissueForm />
+      </div>
       <Footer />
     </div>
   )

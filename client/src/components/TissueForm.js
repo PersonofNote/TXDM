@@ -14,39 +14,41 @@ import { FaMicroscope } from 'react-icons/fa'
 
 /* eslint-disable-next-line */ 
 const url = `https://txdm-api.herokuapp.com/api/post_sample`
+// const url = "http://localhost:5000/api/post_sample"
 
 function TissueForm () {
   const [data, setData] = useState(
     {
       diagnosisType: null,
-      tissueType: null,
+      tissueType: [],
       quantity: null
     }
   )
-  const [activeMultiSelect, setActiveMultiSelect] = useState([])
   const [loadingResults, setLoadingResults] = useState(false)
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState(null)
 
-  const handleSelect = e => {
+  const handleSelect = async e => {
     // TODO: consider breaking this up into smaller pieces and offering more customization
-    // BUG: Form is still one click behind
     if (e.currentTarget.name === 'quantity') {
       e.preventDefault()
       const unitsDiv = document.getElementById('units')
       setData({ ...data, [e.target.name]: `${e.currentTarget.value} ${unitsDiv.value} ` })
     } else {
-      if (e.target.multiple) {
-        // TODO: Consider detecting a button group specifically
+      if (e.target.name==="tissueType") {
         e.preventDefault()
-        if (activeMultiSelect.includes(e.target.value)) {
+        const val = e.target.value
+        const propName = e.target.name
+        // TODO: Consider detecting a button group specifically
+        
+        e.preventDefault()
+        if (data[propName].includes(val)) {
           // Remove from list
-          const updatedList = activeMultiSelect.filter(element => element !== e.target.value)
-          setActiveMultiSelect(updatedList, setData({ ...data, [e.target.name]: activeMultiSelect }))
+          setData({ ...data, [propName]: data[propName].filter(element => element !== val) })
         } else {
           // Add to list
-          setActiveMultiSelect([...activeMultiSelect, e.currentTarget.value], setData({ ...data, [e.target.name]: activeMultiSelect }))
+          setData({...data, [propName]: [...data[propName], val]})
         }
-        setData({ ...data, [e.target.name]: activeMultiSelect })
+        
       } else {
         setData({ ...data, [e.target.name]: e.currentTarget.value })
       }
@@ -57,11 +59,10 @@ function TissueForm () {
   const resetForm = () => {
     setData({
       diagnosisType: null,
-      tissueType: null,
+      tissueType: [],
       quantity: null
     })
-    setActiveMultiSelect([])
-    setResults([])
+    setResults(null)
   }
 
   const handleSubmit = e => {
@@ -78,7 +79,7 @@ function TissueForm () {
       .then((data) => {
         // TODO: Make a cute loader
         setLoadingResults(false)
-        setResults(data.data)
+        data.data ? setResults(data.data) : setResults(data.err)
         console.log(results)
       })
       .catch((error) => {
@@ -102,7 +103,7 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
   // TODO: Extract into own function
   const buttonSelects = Object.keys(selectValues).map((val) => {
     const padding = adjustPropertySizebyTextLength(selectValues[val])
-    return <button multiple name="tissueType" className={`m-2 button leading-tight ${activeMultiSelect.includes(selectValues[val]) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={selectValues[val]} key={`form-${val}`}>{selectValues[val]}</button>
+    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(selectValues[val]) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={selectValues[val]} key={`form-${val}`}>{selectValues[val]}</button>
   }
   )
 
@@ -119,13 +120,13 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
     */
   return (
     <>
-    {!results.length > 0 && (
+    {!results && (
       <>
       <h2>Tell us about your sample</h2>
       <form>
           <div className="form-element">
           <h3 className={`helper-text ${data.diagnosisType === null && 'visible'}`}>Are You Looking For:</h3>
-          <div className="flex justify-center items-center"><BiDna /><h4> Diagnosis Type </h4></div>
+          <div className="flex justify-center items-center"><BiDna className="icon" style={{fill: '#0077b6'}}/><h4> Diagnosis Type </h4></div>
           <div className="flex justify-center">
           <div className="form-check inline-block">
             <input onClick={handleSelect} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" id="cancer" name="diagnosisType" value="cancer" />
@@ -144,18 +145,18 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
           {data.diagnosisType != null && (
           <div className="form-element">
           <h3 className={`helper-text ${data.tissueType === null && 'visible'}`}>What kind of tissue is it?</h3>
-          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope /> Tissue Type:</label>
+          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon" style={{fill: '#0077b6'}} /> Tissue Type:</label>
           {data.tissueType && data.tissueType.length === 0 && <div>Please select at least one tissue type </div>}
           <div className="flex flex-row flex-wrap justify-center max-w-m">
             {buttonSelects}
           </div>
           </div>
           )}
-          {data.tissueType != null && (
+          {data.tissueType.length > 0 && (
           <div className="form-element">
               <h3 className={`helper-text ${data.quantity === null && 'visible'}`}>How much do you have?</h3>
               <div className="flex flex-row justify-center">
-              <label htmlFor="quantity" className="flex justify-center items-center"><GoBeaker /> Quantity (number):</label>
+              <label htmlFor="quantity" className="flex justify-center items-center"><GoBeaker className="icon" style={{fill: '#0077b6'}} /> Quantity (number):</label>
               <input onChange={handleSelect} type="number" id="quantity" name="quantity" min="1" max="10000" />
               <select name="units" id="units">
               <option value=" μl"> μl</option>
@@ -166,14 +167,14 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
               </div>
           </div>
           )}
-      {data.quantity != null && data.tissueType.length > 1 && (
+      {data.quantity != null && data.tissueType.length > 0 && (
       <span className="m-auto"><button className='button' onClick={handleSubmit}>Submit </button></span>
       )}
       </form>
       </>
     )}
     <div>{loadingResults && loader}</div>
-    {results.length > 0 && (
+    {results && results !== undefined && results.length > 0 && (
       <>
       <h1>Results:</h1>
       <div className="accordion p-4">
@@ -181,9 +182,24 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
           <Accordion key={r.id} content={r} />
         ))}
         </div>
-      <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
+        <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
       </>
     )}
+    {
+      results && results.length < 1 && (
+        <>
+        <div style={{maxWidth: `550px`, margin: 'auto', height: `250px`, display: 'flex', alignItems: 'center'}}>There are no results for the combination selected; please select a different combination and try again.</div>
+        <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
+        </>
+      )
+    }
+    { results === undefined && (
+      <>
+      <div>Something went wrong, please try again</div>
+      <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
+      </>
+    )
+    }
     </>
   )
 }
