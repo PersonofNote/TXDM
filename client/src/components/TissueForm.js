@@ -15,8 +15,8 @@ import { BiDna } from 'react-icons/bi'
 import { FaMicroscope } from 'react-icons/fa'
 
 /* eslint-disable-next-line */ 
-const url = `https://txdm-api.herokuapp.com/api/post_sample`
-// const url = "http://localhost:5000/api/post_sample"
+// const url = `https://txdm-api.herokuapp.com/api/post_sample`
+const url = "http://localhost:5000/api/post_sample"
 
 function TissueForm () {
   const [data, setData] = useState(
@@ -28,8 +28,6 @@ function TissueForm () {
   )
   const [loadingResults, setLoadingResults] = useState(false)
   const [results, setResults] = useState(null)
-  // Todo: consider making this more flexible to accept an array or an object of errors.
-  // For now there is only one real error that can happen on the form side.
   const [hasBeenClicked, setHasBeenClicked] = useState(false);
 
   const handleSelect = async e => {
@@ -58,7 +56,6 @@ function TissueForm () {
         setData({ ...data, [e.target.name]: e.currentTarget.value })
       }
     }
-    console.log(JSON.stringify(data))
   }
 
   const resetForm = () => {
@@ -84,8 +81,8 @@ function TissueForm () {
       .then((response) => response.json())
       .then((data) => {
         setLoadingResults(false)
-        data.data ? setResults(data.data) : setResults(data.err)
-        console.log(results)
+        console.log(data.data)
+        setResults(data.data, console.log(results))
       })
       .catch((error) => {
         console.error('Error:', error)
@@ -190,7 +187,7 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
       </>
     )}
     {
-      results && results.length < 1 && (
+      (results && results.length < 1)  && (
         <>
         <div style={{maxWidth: `550px`, margin: 'auto', height: `250px`, display: 'flex', alignItems: 'center'}}>There are no results for the combination selected; please select a different combination and try again.</div>
         <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>
