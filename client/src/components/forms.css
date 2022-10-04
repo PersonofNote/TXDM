@@ -26,8 +26,9 @@ form div {
     background-color: var(--darker);
 }
 
-.results-list {
-  list-style: none;
+.results {
+  animation-duration: 1s;
+  animation-name: reveal;
 }
 
 input {

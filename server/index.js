@@ -86,10 +86,9 @@ const getResults = async(table, types) => {
       const rField = record.fields['Required Sample Types'];
       const idKeys = types.map(type => airtable_data.tissue_sample_ids_by_name[type])
       if (rField.some(item => idKeys.includes(item))) {
-        const sample_names = record.fields['Required Sample Types'].map(r => {console.log("INDIVIDUAL"); console.log(r); console.log(airtable_data.tissue_sample_names_by_id[r]); return airtable_data.tissue_sample_names_by_id[r]})
+        const sample_names = record.fields['Required Sample Types'].map(r => airtable_data.tissue_sample_names_by_id[r])
         record.tissue_sample_name = sample_names;
         list.push(record)
-        console.log('Match Found, pushing', record );
       }
     }
   });

@@ -4,7 +4,7 @@ function Footer ({ logo = null, links = null, socialIcons = null, copyrightText 
   const renderLinks = (links) => links.map(link => <a key={''} href={link.href}>{link.text}</a>)
   const year = new Date().getFullYear()
   return (
-      <footer className="footer" style={{ backgroundColor: bgColor }}>
+      <footer className="footer text-xs" style={{ backgroundColor: bgColor }}>
         {logo && logo}
         { links &&
         <div className='left'>{renderLinks(links)}</div>
@@ -12,7 +12,7 @@ function Footer ({ logo = null, links = null, socialIcons = null, copyrightText 
         {
           socialIcons && socialIcons
         }
-        Copyright {year} {copyrightText}
+        ©{year} {copyrightText}
       </footer>
   )
 }

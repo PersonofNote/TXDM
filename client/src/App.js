@@ -15,7 +15,7 @@ function App () {
       <div className="content">
         <TissueForm />
       </div>
-      <Footer />
+      <Footer copyrightText={"TXDM"}/>
     </div>
   )
 }

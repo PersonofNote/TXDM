@@ -6,6 +6,7 @@ import './forms.css'
 
 // Components
 import Accordion from './Accordion'
+import Loader from './Loader'
 
 // Icons
 import { GoBeaker } from 'react-icons/go'
@@ -13,8 +14,8 @@ import { BiDna } from 'react-icons/bi'
 import { FaMicroscope } from 'react-icons/fa'
 
 /* eslint-disable-next-line */ 
-const url = `https://txdm-api.herokuapp.com/api/post_sample`
-// const url = "http://localhost:5000/api/post_sample"
+// const url = `https://txdm-api.herokuapp.com/api/post_sample`
+const url = "http://localhost:5000/api/post_sample"
 
 function TissueForm () {
   const [data, setData] = useState(
@@ -107,8 +108,6 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
   }
   )
 
-  const loader = 'Loading'
-
   // Consider a dropdown to learn more
   // TODO: Get linked data types]
   /*
@@ -120,13 +119,15 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
     */
   return (
     <>
-    {!results && (
+    {loadingResults && <Loader />}
+    
+    {!results && !loadingResults && (
       <>
       <h2>Tell us about your sample</h2>
       <form>
           <div className="form-element">
           <h3 className={`helper-text ${data.diagnosisType === null && 'visible'}`}>Are You Looking For:</h3>
-          <div className="flex justify-center items-center"><BiDna className="icon" style={{fill: '#0077b6'}}/><h4> Diagnosis Type </h4></div>
+          <div className="flex justify-center items-center"><BiDna className="icon" style={{fill: '#0077b6'}}/><h4 className="pl-2"> Diagnosis Type </h4></div>
           <div className="flex justify-center">
           <div className="form-check inline-block">
             <input onClick={handleSelect} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" id="cancer" name="diagnosisType" value="cancer" />
@@ -145,7 +146,7 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
           {data.diagnosisType != null && (
           <div className="form-element">
           <h3 className={`helper-text ${data.tissueType === null && 'visible'}`}>What kind of tissue is it?</h3>
-          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon" style={{fill: '#0077b6'}} /> Tissue Type:</label>
+          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon" style={{fill: '#0077b6'}} /> <span className="pl-2">Tissue Type:</span></label>
           {data.tissueType && data.tissueType.length === 0 && <div>Please select at least one tissue type </div>}
           <div className="flex flex-row flex-wrap justify-center max-w-m">
             {buttonSelects}
@@ -157,7 +158,7 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
               <h3 className={`helper-text ${data.quantity === null && 'visible'}`}>How much do you have?</h3>
               <div className="flex flex-row justify-center">
               <label htmlFor="quantity" className="flex justify-center items-center"><GoBeaker className="icon" style={{fill: '#0077b6'}} /> Quantity (number):</label>
-              <input onChange={handleSelect} type="number" id="quantity" name="quantity" min="1" max="10000" />
+              <input onChange={handleSelect} style={{maxWidth: '50px', paddingLeft: '4px'}} type="number" id="quantity" name="quantity" min="1" max="10000" />
               <select name="units" id="units">
               <option value=" μl"> μl</option>
               <option value="ml">ml</option>
@@ -167,17 +168,16 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
               </div>
           </div>
           )}
-      {data.quantity != null && data.tissueType.length > 0 && (
-      <span className="m-auto"><button className='button' onClick={handleSubmit}>Submit </button></span>
+      {data.quantity != null && data.tissueType.length > 0 && data.quantity != null && data.quantity !== "" && (
+      <span className="m-auto pt-6"><button className='button' onClick={handleSubmit}>Submit </button></span>
       )}
       </form>
       </>
     )}
-    <div>{loadingResults && loader}</div>
-    {results && results !== undefined && results.length > 0 && (
+    {!loadingResults && results && results !== undefined && results.length > 0 && (
       <>
       <h1>Results:</h1>
-      <div className="accordion p-4">
+      <div className="results accordion p-4">
         {results.map(r => (
           <Accordion key={r.id} content={r} />
         ))}
