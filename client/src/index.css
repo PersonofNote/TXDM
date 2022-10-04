@@ -11,12 +11,18 @@
   --darkest: #03045e;
   --text-dark: black;
   --text-light: white;
-  --transition-duration-medium: 400ms; 
+  --error: #ff3333;
+  --transition-duration-short: 200ms;
+  --transition-duration-medium: 400ms;
+  --transition-duration-long: 1s;
+  --padding-unit: 1rem;
 }
 
 @media (prefers-reduced-motion) {
   :root {
+    --transition-duration-short: 0;
     --transition-duration-medium: 0;
+    --transition-duration-long: 0; 
   }
 }
 
@@ -36,6 +42,10 @@ code {
 a {
   color: var(--darkest);
   font-weight: bold;
+}
+
+.error {
+  color: var(--error);
 }
 
 .button {

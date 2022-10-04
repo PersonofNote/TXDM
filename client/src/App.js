@@ -11,7 +11,7 @@ import sampleData from './data.json'
 function App () {
   return (
     <div className="App">
-      <Header leftLinks={sampleData.header_links}/>
+      <Header leftLinks={sampleData.header_links} textColor={'white'}/>
       <div className="content">
         <TissueForm />
       </div>

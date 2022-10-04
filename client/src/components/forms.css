@@ -29,10 +29,16 @@ form div {
 .results {
   animation-duration: 1s;
   animation-name: reveal;
+  min-height: 400px;
 }
 
 input {
   border-bottom: 1px solid var(--darker);
+}
+
+.accordion-content {
+  text-align: left;
+  padding-left: var(--padding-unit)
 }
 
 @keyframes reveal {
