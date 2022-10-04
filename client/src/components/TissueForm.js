@@ -80,7 +80,7 @@ function TissueForm () {
       .then((response) => response.json())
       .then((data) => {
         setLoadingResults(false)
-        console.log(data.data)
+        console.log(data)
         setResults(data.data, console.log(results))
       })
       .catch((error) => {
@@ -121,7 +121,7 @@ const dropdownElement = <select required onChange={handleSelect} multiple name="
     <>
     {loadingResults && <Loader />}
     
-    {!results && !loadingResults && (
+    {!results && !loadingResults && results !== undefined && (
       <>
       <h2>Tell us about your sample</h2>
       <form>

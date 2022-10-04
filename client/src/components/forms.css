@@ -18,6 +18,8 @@ form div {
 }
 
 .form-element {
+  max-width: 750px;
+  margin: auto;
     animation-duration: 1s;
     animation-name: reveal; 
 }
