@@ -15,8 +15,7 @@ import { BiDna } from 'react-icons/bi'
 import { FaMicroscope } from 'react-icons/fa'
 
 /* eslint-disable-next-line */ 
-// const url = `https://txdm-api.herokuapp.com/api/post_sample`
-const url = "http://localhost:5000/api/post_sample"
+const url = process.env.NODE_ENV === 'development' ? "http://localhost:5000/api/post_sample" : `https://txdm-api.herokuapp.com/api/post_sample`
 
 function TissueForm () {
   const [data, setData] = useState(
