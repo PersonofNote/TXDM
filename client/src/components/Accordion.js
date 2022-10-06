@@ -13,6 +13,8 @@ const Accordion = ({ content }) => {
       {isActive && (
         <div className="accordion-content">
         <div className="accordion-description">{content.fields.Description}</div>
+        <div><b>Derived from:</b> {content.tissue_sample_name.join(', ')} </div>
+        <a href={content.fields['Technical Documentation / Protocol']}>Technical Documentation / Protocol</a>
         </div>
       )}
     </div>
