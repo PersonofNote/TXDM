@@ -1,8 +1,8 @@
 {
   "header_links": [
     {
-      "text": "Link1",
-      "href": "www.aminorstudio.com"
+      "text": "TXDM",
+      "href": "https://www.aminorstudio.com"
     }
   ],
     "tissue_sample_types": 
@@ -24,5 +24,33 @@
     "recuZMDwJMMchIQjn": "ctDNA",
     "recyEJzBs2n36YWA5": "Saliva",
     "reczCaSqvunbPx7KE": "FFPE Tumor"
-  }
+  },
+  "cancer": [
+    "ctRNA", 
+    "Core", 
+    "Block", 
+    "Slides", 
+    "Fresh Frozen Tumor", 
+    "Fresh Tumor", 
+    "ctDNA",
+    "FFPE Tumor"
+  ],
+  "rareDisease": [
+    "Blood",
+    "Saliva",
+    "Serum",
+    "Plasma",
+    "Cells",
+    "PBMC"
+  ],
+  "tissue_sample_units": [
+    "µL",
+    "μg",
+    "ng",
+    "mL",
+    "µm",
+    "Cells",
+    "cc", 
+    "Tubes"
+  ]
 }

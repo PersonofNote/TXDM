@@ -34,16 +34,31 @@ const preLoadData = async() => {
   const LINKED_DATA = {}
   LINKED_DATA.tissue_sample_names_by_id = {}
   LINKED_DATA.tissue_sample_ids_by_name = {}
+  LINKED_DATA.providers = {}
 
   const tissue_sample_table = 'tbliGPwuWUq0KnIH4'
-  const records = await base(tissue_sample_table).select().all();
+  const tissue_records = await base(tissue_sample_table).select().all();
+  const providers_table = 'tbl8atXH48SRFZVBv'
 
-  records.forEach(function(record) {
+  tissue_records.forEach(function(record) {
     id = record.id
     field_name = record.get('Tissue')
     LINKED_DATA.tissue_sample_names_by_id[id] = field_name
     LINKED_DATA.tissue_sample_ids_by_name[field_name] = id
 });
+
+  provider_records = await base(providers_table).select().all();
+  provider_records.forEach(record => {
+    id = record.id
+    provider_name = record.get('Name')
+    logo = record.get('DX co Logo')
+    url = record.get('Website')
+    LINKED_DATA.providers[id] = {
+      "name": provider_name,
+      "logo": logo,
+      "url": url
+    }
+  })
 
   return LINKED_DATA
 }
