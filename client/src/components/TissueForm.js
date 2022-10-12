@@ -52,6 +52,7 @@ function TissueForm () {
         }
         
       } else {
+        // Check for the state where it's cancer vs rare disease and that's changed!
         setData({ ...data, [e.target.name]: e.currentTarget.value })
       }
     }
@@ -93,14 +94,30 @@ function TissueForm () {
   const cancerValues = constants.cancer
   const rareDiseaseValues = constants.rareDisease 
   // TODO: Extract into single, reusable component
-  const cancerButtonSelects = cancerValues.map((val) => {
+  const cancerUnhealthyButtons = cancerValues.unhealthySample.map((val) => {
     const padding = adjustPropertySizebyTextLength(val)
-    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(val) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={val} key={`form-${val}`}>{val}</button>
+    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(val) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={val} key={`form-unhealthy-sample-${val}`}>{val}</button>
+  })
+  const cancerHealthyTissueButtons = cancerValues.healthySample.map((val) => {
+    const padding = adjustPropertySizebyTextLength(val)
+    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(val) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={val} key={`form-health-sample-${val}`}>{val}</button>
   })
   const rareDiseaseButtonSelects = rareDiseaseValues.map((val) => {
     const padding = adjustPropertySizebyTextLength(val)
-    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(val) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={val} key={`form-${val}`}>{val}</button>
+    return <button multiple name="tissueType" className={`m-2 button leading-tight ${data['tissueType'].includes(val) ? 'active' : ''}`} style={{ margin: '2px', padding }} onClick={handleSelect} value={val} key={`form-sample-${val}`}>{val}</button>
   })
+
+  const cancerButtonsSection = <>
+    <h4 className="p-2">Tumor or Diseased Tissue</h4>
+    <div className="flex flex-row flex-wrap justify-center max-w-m">
+      {cancerUnhealthyButtons} 
+    </div> 
+    <h4 className="w-full text-center p-2">Non-Tumor or Healthy Tissue</h4>
+    <p className="text-xs font-semibold w-2/3 p-2">Diseased /Tumor Tissue must be run with a healthy control tissue, such as Whole Blood, or Healthy Adjacent Tissue</p>
+    <div className="flex flex-row flex-wrap justify-center max-w-m"> 
+      {cancerHealthyTissueButtons} 
+    </div> 
+    </>
 
   const unitDropdown = constants.tissue_sample_units.map(unit => 
     <option key={unit} value={unit}>{unit}</option>
@@ -146,7 +163,7 @@ function TissueForm () {
           <h3 className={`helper-text ${data.tissueType.length < 1 && !hasBeenClicked && 'visible'}`}>What kind of tissue is it?</h3>
           <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon animate-grow" style={{fill: '#0077b6'}} /> <h4 className="pl-2 font-semibold" style={{padding: '8px'}}>Tissue Type</h4></label>
           <div className="flex flex-row flex-wrap justify-center max-w-m">
-            {data.diagnosisType && data.diagnosisType === 'cancer' ? cancerButtonSelects : rareDiseaseButtonSelects}
+            {data.diagnosisType && data.diagnosisType === 'cancer' ? cancerButtonsSection : rareDiseaseButtonSelects}
           </div>
           {hasBeenClicked && data.tissueType.length < 1 && <div className="error">Please select at least one tissue type </div>}
           </div>
