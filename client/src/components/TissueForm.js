@@ -6,7 +6,7 @@ import './forms.css'
 import './icons-animations.css'
 
 // Components
-import Accordion from './Accordion'
+import ResultsAccordion from './ResultsAccordion'
 import Loader from './Loader'
 
 // Icons
@@ -82,7 +82,7 @@ function TissueForm () {
       .then((data) => {
         setLoadingResults(false)
         console.log(data)
-        setResults(data.data, console.log(results))
+        setResults(data.data)
       })
       .catch((error) => {
         console.error('Error:', error)
@@ -191,7 +191,7 @@ function TissueForm () {
       <h1>Results:</h1>
       <div className="results accordion p-4">
         {results.map(r => (
-          <Accordion key={r.id} content={r} />
+          <ResultsAccordion key={r.id} content={r} />
         ))}
         </div>
         <span className="flex justify-center"><button className="button" onClick={resetForm}> Start Over</button></span>

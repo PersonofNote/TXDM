@@ -71,38 +71,25 @@ preLoadData().then((result)=>{
   console.log("Preloaded data:")
   console.log(airtable_data)
 
-const printTable = async(table, fields) => {
-  const table_id = AIRTABLE_TABLE_IDS[table]
-  const formatTableName = (table) => {
-    return table.split('_')
-  }
-  const list = []
-  const records = await base(table).select().all();
-  records.forEach(function(record) {
-    // TODO: Filter by supplied fields
-    list.push(record.get(fields[0]))
-});
-  return list
-}
-
-
-const getResults = async(table, types) => {
-
+    /* 
+    Function looks at Data Type table and filters by required sample type
+    This table doesn't use a linked record, which could require another join - leave the prefectched ids and names
+    for use with this function
+  */
+  
+const getDataTypeBySampleType = async(table, types) => {
   const list = []
   try{
-  // TODO: add pagination? Check if table will get much bigger
+  // TODO: add pagination? Check if table will get much bigger, but I think it is a fixed length
   const records = await base(table).select().all();
 
-  // TODO: Look into inverting this: Look up samples, and then query the machines/assays linked field.
-  // Might be simpler/faster?
-
   records.forEach(function(record) {
-    if (record.fields['Required Sample Types']){
-      const rField = record.fields['Required Sample Types'];
-      const idKeys = types.map(type => airtable_data.tissue_sample_ids_by_name[type])
-      if (rField.some(item => idKeys.includes(item))) {
-        const sample_names = record.fields['Required Sample Types'].map(r => airtable_data.tissue_sample_names_by_id[r])
-        record.tissue_sample_name = sample_names;
+    if (record.fields['Sample Type']){
+      let rField = record.fields['Sample Type']
+      if (typeof(rField) === 'string') {
+        rField = rField.split(",")
+      }
+      if (rField.some(item => types.includes(item))) {
         list.push(record)
       }
     }
@@ -113,7 +100,6 @@ const getResults = async(table, types) => {
   return error
 }
 }
-
 
 app.get('/api', (req, res) => { 
   res.send({ msg: 'API is functioning' });
@@ -126,9 +112,14 @@ app.get('/api/users/:table', (req, res) => {
 
 app.post('/api/post_sample', (req, res) => {
   const tissueType = req.body.tissueType;
+  /*
   getResults('tblAyos67WFzbHe5C', tissueType).then((result)=>{
       res.send({data: result})
   })
+  */
+ getDataTypeBySampleType('tbl9mBFgW23Si1zEp', tissueType).then((result) => {
+  res.send({data:result})
+ })
 })
 
 
