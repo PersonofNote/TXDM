@@ -15,8 +15,8 @@ function Sidebar ({content}) {
         {visible && (
         <aside className="resize">
             <TbLayoutSidebarLeftExpand onClick={handleClick} />
-            <h1>SIDE BAR</h1>
-            <div className="sidebar-content">
+            <h1>Info</h1>
+            <div className="sidebar-content text-left">
                 {content}
             </div>
         </aside>

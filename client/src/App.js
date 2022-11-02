@@ -15,6 +15,7 @@ function App () {
   const [sidebarData, setSidebarData] = useState(sampleData.sidebar_sample[0])
 
   const populateSidebar = e => {
+      // TODO: force open sidebar on populate
     e.preventDefault()
     setSidebarData(e.currentTarget.dataset.info)
     console.log(e.currentTarget)

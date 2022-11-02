@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react'
 // Preloaded id list from airtable
 import constants from '../data'
@@ -8,6 +10,7 @@ import './icons-animations.css'
 // Components
 import ResultsAccordion from './ResultsAccordion'
 import Loader from './Loader'
+import TissueSampleSelect from './TissueSampleData'
 
 // Icons
 import { GoBeaker } from 'react-icons/go'
@@ -20,7 +23,6 @@ import sampleData from '../data.json'
 const url = process.env.NODE_ENV === 'development' ? "http://localhost:5000/api/post_sample" : `https://txdm-api.herokuapp.com/api/post_sample`
 
 function TissueForm({populateSidebar}) {
-
   const [data, setData] = useState(
     {
       diagnosisType: null,
@@ -146,7 +148,7 @@ function TissueForm({populateSidebar}) {
       <form>
           <div className="form-element">
           <h3 className={`helper-text ${data.diagnosisType === null && 'visible'}`}>Are You Looking For:</h3>
-          <div className="flex justify-center items-center"><BiDna className="icon animate-grow" style={{fill: '#0077b6'}}/><h4 className="pl-2 font-semibold"> Diagnosis Type </h4> <span className="pl-2"> <FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[0]} onClick={populateSidebar} /></span></div>
+          <div className="flex justify-center items-center"><BiDna className="icon animate-grow" style={{fill: '#0077b6'}}/><h4 className="pl-2 font-semibold"> Diagnosis Type </h4> <span className="pl-2"> <FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[1]} onClick={populateSidebar} /></span></div>
           <div className="flex justify-center">
           <div className="form-check inline-block">
             <input onClick={handleSelect} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" id="cancer" name="diagnosisType" value="cancer" />
@@ -162,16 +164,25 @@ function TissueForm({populateSidebar}) {
       </div>
             </div>
           </div>
-          {data.diagnosisType != null && (
+          { data.diagnosisType != null && (
           <div className="form-element">
           <h3 className={`helper-text ${data.tissueType.length < 1 && !hasBeenClicked && 'visible'}`}>What kind of tissue is it?</h3>
-          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon animate-grow" style={{fill: '#0077b6'}} /> <h4 className="pl-2 font-semibold" style={{padding: '8px'}}>Tissue Type</h4> <span className="pl-2"> <FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[1]} onClick={populateSidebar} /></span></label>
+          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon animate-grow" style={{fill: '#0077b6'}} /> <h4 className="pl-2 font-semibold" style={{padding: '8px'}}>Tissue Type</h4> <span className="pl-2"> <FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[2]} onClick={populateSidebar} /></span></label>
           <div className="flex flex-row flex-wrap justify-center max-w-m">
             {data.diagnosisType && data.diagnosisType === 'cancer' ? cancerButtonsSection : rareDiseaseButtonSelects}
           </div>
           {hasBeenClicked && data.tissueType.length < 1 && <div className="error">Please select at least one tissue type </div>}
           </div>
-          )}
+          )
+}
+          {/*
+          <div className="form-element">
+          <h3 className={`helper-text`}>What kind of tissue is it?</h3>
+          <label className="flex justify-center items-center" htmlFor="tissueType"><FaMicroscope className="icon animate-grow" style={{fill: '#0077b6'}} /> <h4 className="pl-2 font-semibold" style={{padding: '8px'}}>Tissue Type</h4> <span className="pl-2"> <FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[1]} onClick={populateSidebar} /></span></label>
+            <div className="flex flex-row flex-wrap justify-center max-w-m"></div>
+          <TissueSampleSelect explainer_data={sampleData.sidebar_sample} />
+          </div>
+        */}
           {data.tissueType.length > 0 && (
           <div className="form-element">
               <h3 className={`helper-text ${data.quantity === null && 'visible'}`}>How much do you have?</h3>
