@@ -1,39 +1,55 @@
-import React, {useState} from 'react'
-import './App.css'
+import React, {useEffect, useState} from 'react';
+import './App.css';
 
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
+// App pages
+import TissueInputPage from './pages/TissueInputPage';
+import CompanyDashboard from './pages/CompanyDashboard'
+import Signup from './pages/Signup'
+import Signin from './pages/Signin'
+import ErrorPage from './pages/ErrorPage'
+
+// Layout components
 import Header from './components/Header'
-import Footer from './components/Footer'
-import TissueForm from './components/TissueForm'
-import Sidebar from './components/Sidebar'
+
 import sampleData from './data.json'
 
-// TODO: Add React Router
+function App() {
 
-// TODO: Keep track of active buttons at this level?
 
-function App () {
-  const [sidebarData, setSidebarData] = useState(sampleData.sidebar_sample[0])
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const populateSidebar = e => {
-      // TODO: force open sidebar on populate
-    e.preventDefault()
-    setSidebarData(e.currentTarget.dataset.info)
-    console.log(e.currentTarget)
-    console.log(e.currentTarget.dataset.info)
-  }
+// TODO: Is this the best way to do this?
+  useEffect(() => {
+    user === null && setUser(JSON.parse(localStorage.getItem('PMMUser')), setLoading(false));
+  },[user])
+
 
   return (
-    <div className="App">
-      <Header leftLinks={sampleData.header_links} textColor={'white'}/>
-      <div className="main">
-      <div className="content">
-        <TissueForm populateSidebar={populateSidebar} />
+    <div>
+      <BrowserRouter>
+      <div>
+        <Header user={user} setUser={setUser} leftLinks={sampleData.header_links} textColor={'white'} />
+        {!loading &&(
+          <Routes>
+            <Route path="/" element={<TissueInputPage />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signin" element={<Signin setUser={setUser} user={user} />} />
+            <Route path="/test" element={<CompanyDashboard />} />
+            <Route path="/dashboard/:id" element={<CompanyDashboard user={user}/>} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        )}
       </div>
-        <Sidebar content={sidebarData} visible={true}/>
-      </div>
-      <Footer copyrightText={"TXDM"}/>
-    </div>
-  )
+     </BrowserRouter>
+  </div>
+  );
 }
 
-export default App
+export default App;

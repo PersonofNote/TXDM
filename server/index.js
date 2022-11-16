@@ -11,7 +11,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const AIRTABLE_TABLE_IDS = process.env.AIRTABLE_TABLE_IDS;
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 const passList = {
   origin: FRONTEND_URL
@@ -34,18 +34,26 @@ const preLoadData = async() => {
   const LINKED_DATA = {}
   LINKED_DATA.tissue_sample_names_by_id = {}
   LINKED_DATA.tissue_sample_ids_by_name = {}
+  LINKED_DATA.tissue_sample_units = {}
   LINKED_DATA.providers = {}
 
   const tissue_sample_table = 'tbliGPwuWUq0KnIH4'
   const tissue_records = await base(tissue_sample_table).select().all();
+  const units = await base('tbleziLQlCca64iAk').select().all();
   const providers_table = 'tbl8atXH48SRFZVBv'
 
-  tissue_records.forEach(function(record) {
+  tissue_records.forEach(record => {
     id = record.id
     field_name = record.get('Tissue')
     LINKED_DATA.tissue_sample_names_by_id[id] = field_name
     LINKED_DATA.tissue_sample_ids_by_name[field_name] = id
 });
+
+  units.forEach(record => {
+    tissue_name = record.get('Name')
+    tissue_unit = record.get('Unit')
+    LINKED_DATA.tissue_sample_units[tissue_name] = tissue_unit
+  })
 
   provider_records = await base(providers_table).select().all();
   provider_records.forEach(record => {

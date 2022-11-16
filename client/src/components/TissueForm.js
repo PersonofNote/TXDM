@@ -17,10 +17,11 @@ import { GoBeaker } from 'react-icons/go'
 import { BiDna } from 'react-icons/bi'
 import { FaMicroscope, FaInfoCircle } from 'react-icons/fa'
 
+
 import sampleData from '../data.json'
 
 /* eslint-disable-next-line */ 
-const url = process.env.NODE_ENV === 'development' ? "http://localhost:5000/api/post_sample" : `https://txdm-api.herokuapp.com/api/post_sample`
+const url = process.env.NODE_ENV === 'development' ? "http://localhost:8080/api/post_sample" : `https://txdm-api.herokuapp.com/api/post_sample`
 
 function TissueForm({populateSidebar}) {
   const [data, setData] = useState(
@@ -144,7 +145,10 @@ function TissueForm({populateSidebar}) {
     
     {!results && !loadingResults && results !== undefined && (
       <>
-      <h2>Tell us about your sample </h2>
+      <div className="flex flex-row justify-center">
+      <input type="checkbox" id="scales" name="scales" />
+      <label className="pl-2 flex flex-row align-center" for="scales">Only show CLIA results <span className="pl-2"><FaInfoCircle className="info-button" data-info={sampleData.sidebar_sample[3]} onClick={populateSidebar} /></span></label>
+    </div>
       <form>
           <div className="form-element">
           <h3 className={`helper-text ${data.diagnosisType === null && 'visible'}`}>Are You Looking For:</h3>
@@ -155,12 +159,18 @@ function TissueForm({populateSidebar}) {
             <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault1">
               Cancer
             </label>
-      </div>
+          </div>
       <div className="form-check inline-block">
         <input onClick={handleSelect} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="diagnosisType" id="rareDisease" />
         <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault2">
           Rare Disease
         </label>
+      </div>
+      <div className="form-check inline-block">
+            <input onClick={handleSelect} className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" id="cancer" name="diagnosisType" value="cancer" />
+            <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault1">
+              General
+            </label>
       </div>
             </div>
           </div>

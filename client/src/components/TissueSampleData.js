@@ -14,9 +14,7 @@ import { FaMicroscope, FaInfoCircle } from 'react-icons/fa'
 
 function TissueSampleSelect({addTissueSample, tissueType, explainer_data}) {
     const [state, setState] = useState({
-        exercise: "jog",
-        minutes: 15,
-        interval: "day",
+       
       })
         
     const handleClick = e => {

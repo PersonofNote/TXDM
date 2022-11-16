@@ -73,6 +73,7 @@ a {
   align-content: center;
   align-items: center;
   padding: 8px 12px;
+  justify-content: center;
 }
 
 .svg-button {
@@ -124,8 +125,6 @@ h3 {
 
 .main {
   padding: 2rem;
-  display: flex;
-  flex-direction: row;
 }
 
 .content {

@@ -1,0 +1,20 @@
+.provider-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    padding: 12px 0;
+    border-bottom: 1px solid lightgray;
+}
+
+
+@media only screen and (max-width: 735px) {
+    .provider-data {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .provider-data {
+        grid-template-columns: 1fr;
+    }
+}
